@@ -1,0 +1,21 @@
+{
+  "name": "lawyer-layers",
+  "version": "0.1.0",
+  "description": "Project 4 - Formation Alyra - Promotion Satoshi",
+  "scripts": {
+    "test": "truffle test"
+  },
+  "dependencies": {
+    "@ensdomains/ens-contracts": "^0.0.20",
+    "@truffle/hdwallet-provider": "^2.1.7",
+    "chai": "^4.3.7",
+    "dotenv": "^16.0.3",
+    "erc721a": "^4.2.3",
+    "merkletreejs": "^0.3.9",
+    "web3-utils": "^1.9.0"
+  },
+  "devDependencies": {
+    "@openzeppelin/contracts": "^4.8.2",
+    "eth-gas-reporter": "^0.2.25"
+  }
+}

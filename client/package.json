@@ -1,0 +1,44 @@
+{
+  "name": "truffle-client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "postcss src/styles.css -o public/build/tailwind.css",
+    "start": "webpack serve"
+  },
+  "dependencies": {
+    "axios": "^1.3.5",
+    "ipfs-http-client": "^60.0.0",
+    "react-dropzone": "^14.2.3",
+    "react-router-dom": "^6.10.0",
+    "web3": "^1.8.2"
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.18.6",
+    "autoprefixer": "^10.4.14",
+    "babel-loader": "^9.1.2",
+    "css-loader": "^6.7.3",
+    "dotenv": "^16.0.3",
+    "eslint": "^8.34.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-webpack-plugin": "^4.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "postcss": "^8.4.21",
+    "postcss-import": "^15.1.0",
+    "style-loader": "^3.3.1",
+    "tailwindcss": "^3.3.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "description": "This react project is unopinionated with only `web3.js` as an added dependency, so nothing stands in your way.",
+  "main": "postccs.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
