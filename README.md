@@ -1,5 +1,6 @@
 # Vercel 
 DApp deployed for jury observations: https://project4-draft.vercel.app
+Contracts deployed on mumbai: https://mumbai.polygonscan.com/address/0x78e7b5fF97Ceaa33367D74888b05af4f2C548198
 
 #
 Demo of the initial setup, tailwind rendering off requires debugging: https://vimeo.com/816425191/82da709c6c

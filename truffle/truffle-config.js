@@ -18,7 +18,16 @@ module.exports = {
                 );
             },
             network_id: 5,
-        }
+        },
+        mumbai: {
+            provider: function () {
+                return new HDWalletProvider(
+                    `${process.env.MNEMONIC}`,
+                    `https://polygon-mumbai.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`
+                );
+            },
+            network_id: 80001,
+        },
     },
 
     mocha: {
