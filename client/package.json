@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "postcss src/styles.css -o public/build/tailwind.css",
+    "build": "webpack",
     "start": "webpack serve"
   },
   "dependencies": {
     "axios": "^1.3.5",
     "ipfs-http-client": "^60.0.0",
     "nft.storage": "^7.0.3",
+    "postcss-loader": "^7.2.4",
     "react-dropzone": "^14.2.3",
     "react-router-dom": "^6.10.0",
     "web3": "^1.8.2"
@@ -27,7 +28,6 @@
     "postcss": "^8.4.21",
     "postcss-import": "^15.1.0",
     "style-loader": "^3.3.1",
-    "tailwindcss": "^3.3.1",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1"
@@ -36,10 +36,5 @@
     "extends": [
       "react-app"
     ]
-  },
-  "description": "This react project is unopinionated with only `web3.js` as an added dependency, so nothing stands in your way.",
-  "main": "postccs.config.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  }
 }

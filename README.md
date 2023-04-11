@@ -1,5 +1,5 @@
 # Vercel 
-DApp deployed for jury observations: project4-draft.vercel.app
+DApp deployed for jury observations: https://project4-draft.vercel.app
 
 #
 Demo of the initial setup, tailwind rendering off requires debugging: https://vimeo.com/816425191/82da709c6c
