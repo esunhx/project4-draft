@@ -1,5 +1,5 @@
 # Vercel 
-DApp deployed for jury observations: https://project4-draft.vercel.app
+DApp deployed for jury observations: https://project4-draft-1zjc.vercel.app/
 Contracts deployed on mumbai: https://mumbai.polygonscan.com/address/0x78e7b5fF97Ceaa33367D74888b05af4f2C548198
 
 #
