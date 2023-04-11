@@ -1,20 +1,28 @@
 import { useState, useEffect } from 'react';
 import useEth from '../../contexts/EthContext/useEth';
+import SmartContractListener from '../SmartContractListener';
 
 function ContractLifeCycle() {
 	const {
 		state: { contract, accounts, web3 }
 	} = useEth();
-	
+	const [abiFile, setAbiFile] = useState('');
 	const [legalContract, setLegalContract] = useState(null);
 	const [cycle, setCycle] = useState();
 
 	useEffect(() => {
-		const myContract = new web3.eth.Contract(
-		MyNFTContract.abi,
+        async function fetchAbi() {
+                const abiModule = await import('../../contracts/LegalContractNFT.json');
+                setAbiFile(abiModule.default);
+            }; fetchAbi();
+    },  []);
+
+	useEffect(() => {
+		const legalContract = new web3.eth.Contract(
+		abiFile,
 		
 		);
-		setContract(myContract);
+		setContract(legalContract);
 	}, []);
 
 	const cycleToString = (cycle) => {
@@ -33,7 +41,11 @@ function ContractLifeCycle() {
 	
 	useEffect(() => {}, [contract])
 
-	return <></>;
+	contractLifeCycle = (
+		<>
+		</>
+	)
+	// return <div className='justify-center'>{contractLifeCycle}<div/>
 }
 
 export default ContractLifeCycle;

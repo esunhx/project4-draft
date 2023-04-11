@@ -61,7 +61,7 @@ const SmartContractListener = ({ eventName }) => {
             }; fetchAbi();
     },  [isLawfirm, isNft, isAirdrop]);
 
-    const getContractsAddresses = async () => {
+    const getLawfirmsAddresses = async () => {
         await getContractEvents("LawfirmDigitallyFounded");
         return contractEvents.map((event) => event.returnValues.lawfirmAddr);
     }

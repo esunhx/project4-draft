@@ -13,7 +13,7 @@ const User = () => {
     const [associate, setAssociate] = useState(false);
     const [paralegal, setParalegal] = useState(false);
     const [registered, setRegistered] = useState(false);
-    const [uploader, setUploader] = useState(false);
+    const [uploader, setUploader] = useState(true);
     const [error, setError] = useState();
     const [success, setSuccess] = useState();
 

@@ -2,7 +2,7 @@ import { useState, useEffect, useReducer } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import useEth from '../../contexts/EthContext/useEth';
 
-function Header() {
+function Navbar() {
   const {
     state: { accounts }
   } = useEth();
@@ -17,4 +17,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default Navbar;
