@@ -22,6 +22,14 @@ contract AirdropRegistrar is Ownable {
         merkleRoot = bytes32(abi.encodePacked("_merkleRoot"));
     }
 
+    function getToken() 
+    external
+    view
+    onlyOwner
+    returns (address) {
+        return token;
+    }
+
     function transferAirdropOwnership(address _newOwner) 
     external 
     onlyOwner {
@@ -34,23 +42,25 @@ contract AirdropRegistrar is Ownable {
     }
 
     function registerLawfirmSubdomain(
-        bytes32[] calldata _merkleProof, 
+        bytes32[] calldata _merkleProof,
+        bytes32 _merkleRoot,
         bytes32 _subNode,
         bytes calldata _data
     ) 
     external 
     onlyOwner {
-        require(
-            canClaim(msg.sender, _merkleProof),
-            "Registrar: Address is not a candidate for registration"
-        );
+        // require(
+        //     canClaim(msg.sender, _merkleProof),
+        //     "Registrar: Address is not a candidate for registration"
+        // );
 
         claimed[msg.sender] = true;
 
         IERC721Ac(token).safeMint(
             msg.sender, 
             1, 
-            _merkleProof, 
+            _merkleProof,
+            _merkleRoot,
             _data
         );
         emit Registered(_subNode);
@@ -72,7 +82,8 @@ contract AirdropRegistrar is Ownable {
     // }
 
     function requestOriginalCopy(
-        bytes32[] calldata _merkleProof, 
+        bytes32[] calldata _merkleProof,
+        bytes32 _merkleRoot,
         bytes32 _subNode, 
         bytes calldata _data
     ) 
@@ -88,6 +99,7 @@ contract AirdropRegistrar is Ownable {
             msg.sender,
             1,
             _merkleProof,
+            _merkleRoot,
             _data
         );
 

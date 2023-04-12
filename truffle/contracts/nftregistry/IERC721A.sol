@@ -5,7 +5,7 @@ import "../../node_modules/erc721a/contracts/IERC721A.sol";
 import "./LegalContractNFT.sol";
 
 interface IERC721Ac is IERC721A {
-    function safeMint(address to, uint quantity, bytes32[] calldata merkleProof, bytes memory _data) external;
+    function safeMint(address to, uint quantity, bytes32[] calldata merkleProof, bytes32 merkleRoot, bytes memory _data) external;
 
     function setMerkleRoot(bytes32 merkleRoot) external;
 

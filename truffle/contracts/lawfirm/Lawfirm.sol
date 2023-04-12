@@ -18,7 +18,7 @@ contract Lawfirm is Ownable, ENSRegistry {
     ENS internal immutable ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
     ENS lawfirmENS;
     AirdropRegistrar registrar;
-    LegalContractNFT firstContract;
+    LegalContractNFT legalContract;
     
     constructor(address _foundingPartner, string memory _lawfirmName) payable {
         legalMembers[_foundingPartner].isActive = true;
@@ -96,6 +96,51 @@ contract Lawfirm is Ownable, ENSRegistry {
     onlyPartner {
         require(legalMembers[_addr].isActive == true, "Address already inactive");
         legalMembers[_addr].isActive = false;
+    }
+
+    function isWhiteListed(address _userAddr, bytes32 _merkleRoot, bytes32[] calldata _merkleProof) 
+    internal 
+    pure 
+    returns (bool) {
+        return _verify(leaf(_userAddr), _merkleRoot, _merkleProof);
+    }
+
+    function leaf(address partyAddr) 
+    internal
+    pure 
+    returns (bytes32){
+        return (keccak256(abi.encodePacked(partyAddr)));
+    }
+
+    function _verify(bytes32 _leaf, bytes32 _merkleRoot, bytes32[] memory _merkleProof) 
+    pure
+    internal 
+    returns (bool) {
+        return MerkleProof.verify(_merkleProof, _merkleRoot, _leaf);
+    }
+
+    function createLegalContract(bytes32[] calldata _merkleProof, bytes32 _merkleRoot, bytes32 _subNode, bytes memory _data)
+    external {
+        require(isWhiteListed(msg.sender, _merkleRoot, _merkleProof));
+
+        address _token = address(uint160(uint256(
+            keccak256(abi.encodePacked(
+                keccak256(abi.encodePacked(msg.sender)),
+                _subNode
+            ))
+        )));
+        registrar = new AirdropRegistrar(_token);
+        legalContract = new LegalContractNFT(
+            msg.sender, 
+            uint256(uint160(_token)), 
+            string(abi.encodePacked(_token))
+        );
+
+        IAirdropRegistrar(address(registrar))
+        .registerLawfirmSubdomain(_merkleProof, _merkleRoot, _subNode, _data);
+
+        IAirdropRegistrar(address(registrar))
+        .transferNFTOwnership(address(legalContract), msg.sender);
     }
 
     // function createLegalContract(bytes32[] calldata _merkleProof, bytes32 _subNode, bytes memory _data) 

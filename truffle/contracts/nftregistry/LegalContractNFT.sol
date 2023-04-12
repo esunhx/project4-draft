@@ -88,9 +88,9 @@ contract LegalContractNFT is Ownable, ERC721A, AccessControl {
         nextContractCycle();
     }
 
-    function safemint(address _addr, uint8 _quantity, bytes32[] calldata _merkleProof, bytes memory _data) 
+    function safemint(address _addr, uint8 _quantity, bytes32[] calldata _merkleProof, bytes32 _merkleRoot, bytes memory _data) 
     external {
-        require(isWhiteListed(_addr, _merkleProof), "Not WhiteListed");
+        require(isWhiteListed(_addr,_merkleRoot,  _merkleProof), "Not WhiteListed");
         require(_quantity < 2, "Maximum mint quantity exceeded");
         _safeMint(_addr, _quantity, _data);
     }
@@ -125,11 +125,11 @@ contract LegalContractNFT is Ownable, ERC721A, AccessControl {
         baseURI = _baseURI;
     }
 
-    function isWhiteListed(address partyAddr, bytes32[] calldata _merkleProof) 
+    function isWhiteListed(address partyAddr, bytes32 _merkleRoot, bytes32[] calldata _merkleProof) 
     internal 
-    view 
+    pure 
     returns (bool) {
-        return _verify(leaf(partyAddr), _merkleProof);
+        return _verify(leaf(partyAddr), _merkleRoot, _merkleProof);
     }
 
     function leaf(address partyAddr) 
@@ -139,11 +139,11 @@ contract LegalContractNFT is Ownable, ERC721A, AccessControl {
         return (keccak256(abi.encodePacked(partyAddr)));
     }
 
-    function _verify(bytes32 _leaf, bytes32[] memory _merkleProof) 
+    function _verify(bytes32 _leaf, bytes32 _merkleRoot, bytes32[] memory _merkleProof) 
     internal 
-    view 
+    pure 
     returns (bool) {
-        return MerkleProof.verify(_merkleProof, merkleRoot, _leaf);
+        return MerkleProof.verify(_merkleProof, _merkleRoot, _leaf);
     }
 
     function setTokenURI(uint256 _tokenId)
