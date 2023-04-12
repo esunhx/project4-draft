@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { create } from 'ipfs-http-client';
+import { NFTStorage } from 'nft.storage';
 import Dropzone from 'react-dropzone';
 import axios from 'axios';
 

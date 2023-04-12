@@ -12,7 +12,7 @@ const SmartContractListener = ({ eventName }) => {
     const [abiFile, setAbiFile] = useState('');
     const [registeredUserEvent, setRegisteredUserEvent] = useState();
     const [contractEvents, setContractEvents] = useState([]);
-    const [contractAddress, setContractAddress] = useState();
+    const [lawfirmsAddress, setLawfirmsAddress] = useState([]);
 
     useEffect(() => {
         if (
@@ -61,30 +61,40 @@ const SmartContractListener = ({ eventName }) => {
             }; fetchAbi();
     },  [isLawfirm, isNft, isAirdrop]);
 
-    const getLawfirmsAddresses = async () => {
-        await getContractEvents("LawfirmDigitallyFounded");
-        return contractEvents.map((event) => event.returnValues.lawfirmAddr);
-    }
+    useEffect(() => {
+        if (contract) {
+            const eventListener = contract.LawfirmDigitallyFounded({}, (err, ev) => {
+                if (err) console.log(err);
+                else setContractEvents((prevEvs) => [...prevEvs, ev])
+            })
+            return () => {eventListener.unsubscribe()};
+        }
+        setLawfirmsAddress(
+            contractEvents.map((event) => event.returnValues.lawfirmAddress)
+        );
+        contractEventsHandler();
+    }, [isLawfirm, isNft, isAirdrop])
 
     const getContractEvents = async (eventName) => {
-        if (smartContract) {
-            const contractEvents = await smartContract.getPastEvents(`${eventName}`, {
+        if (contract) {
+            const contractEvents = await contract.getPastEvents(`${eventName}`, {
             fromBlock: 0,
             toBlock: "latest",
             }); setContractEvents(contractEvents);
         }
     };
+    
 
     useEffect(() => {}, [eventName])
 
 
 
-    useEffect(() => {
-        const smartContract = new web3.eth.Contract(
-            abiFile,
-            contractAddress
-        );
-    }, [])
+    // useEffect(() => {
+    //     const smartContract = new web3.eth.Contract(
+    //         abiFile,
+    //         lawfirmAddress
+    //     );
+    // }, [])
     //     if (callEvent == 0) {
     //         eventListener = smartContract.events.MyEvent({}, (error, event) => {
     //             if (error) console.error(error);
@@ -106,25 +116,20 @@ const SmartContractListener = ({ eventName }) => {
     //     return () => {
     //         eventListener.unsubscribe();
     //     }
-    // }, [contractAddress])
+    // }, [lawfirmAddress])
     const contractEventsHandler = () => {
         setContractEvents([]);
     } 
 
-    const contractAddressHandler = () => {
-        setContractAddress(null);
+    const lawfirmAddressHandler = () => {
+        setLawfirmAddress([]);
     }
 
-    return (
-        <div>
-        <h2>Contract Event</h2>
-        <ul>
-            {myEvents.map((event) => (
-            <li key={event.id}>{event.returnValues.myData}</li>
-            ))}
-        </ul>
-        </div>
-    );
+    const smartContractListener = (
+        <>
+        </>
+    )
+    return <div>{smartContractListener}</div>;
 };
 
 export default SmartContractListener;

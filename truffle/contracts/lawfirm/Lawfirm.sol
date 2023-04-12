@@ -8,7 +8,6 @@ import "../../node_modules/@ensdomains/ens-contracts/contracts/registry/ENSRegis
 import "../../node_modules/@openzeppelin/contracts/utils/Counters.sol";
 import "../nftregistry/IAirdrop.sol";
 import "../nftregistry/Airdrop.sol";
-import "../nftregistry/IERC721A.sol";
 import "../nftregistry/LegalContractNFT.sol";
 
 contract Lawfirm is Ownable, ENSRegistry {

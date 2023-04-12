@@ -66,7 +66,7 @@ contract AirdropRegistrar is Ownable {
         emit Registered(_subNode);
     }
 
-    function addToWhiteList(address) external {}
+    // function addToWhiteList(address) external {}
 
     // function attachLumpContract(
     //     bytes32[] calldata _merkleProof, 
@@ -81,30 +81,30 @@ contract AirdropRegistrar is Ownable {
     //     IERC721c(token).setTokenURI();
     // }
 
-    function requestOriginalCopy(
-        bytes32[] calldata _merkleProof,
-        bytes32 _merkleRoot,
-        bytes32 _subNode, 
-        bytes calldata _data
-    ) 
-    external {
-        require(
-            canClaim(msg.sender, _merkleProof),
-            "Airdrop: Address is not a candidate for claim"
-        );
+    // function requestOriginalCopy(
+    //     bytes32[] calldata _merkleProof,
+    //     bytes32 _merkleRoot,
+    //     bytes32 _subNode, 
+    //     bytes calldata _data
+    // ) 
+    // external {
+    //     require(
+    //         canClaim(msg.sender, _merkleProof),
+    //         "Airdrop: Address is not a candidate for claim"
+    //     );
 
-        claimed[msg.sender] = true;
+    //     claimed[msg.sender] = true;
 
-        IERC721Ac(token).safeMint(
-            msg.sender,
-            1,
-            _merkleProof,
-            _merkleRoot,
-            _data
-        );
+    //     IERC721Ac(token).safeMint(
+    //         msg.sender,
+    //         1,
+    //         _merkleProof,
+    //         _merkleRoot,
+    //         _data
+    //     );
 
-        emit OriginalCopyIssued(msg.sender, _subNode);
-    }
+    //     emit OriginalCopyIssued(msg.sender, _subNode);
+    // }
 
     function canClaim(address claimer, bytes32[] calldata merkleProof)
     public

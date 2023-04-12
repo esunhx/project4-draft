@@ -49,10 +49,12 @@ const User = () => {
         <>
             {error && <ErrorModal title={error.title} message={error.message} onClick={errorHandler} />}
             {success && <SuccessModal message={success} onClick={successHandler} />}
-            <div className="justify-center">
-                <span>This is the User Page</span>
+            <div class="flex justify-center items-center h-screen bg-gray-100">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <div class="text-xl font-semibold mb-4">This is the User Page</div>
+                    {uploader && <Uploader/>}
+                </div>
             </div>
-            {uploader && <Uploader/>}
         </>
         
     )
