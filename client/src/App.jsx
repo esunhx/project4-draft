@@ -8,6 +8,7 @@ import NotFound from "./components/utils/NotFound";
 function App() {
   return (
     <EthProvider>
+      <h1 className="flex flex-row justify-between bg-cyan-600">yeeee</h1>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />

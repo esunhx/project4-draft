@@ -16,6 +16,7 @@ function EthProvider({ children }) {
         try {        
           address = artifact.networks[networkID].address;
           contract = new web3.eth.Contract(artifact.abi, address);
+          console.log(address, "--- ---", contract.options.address)
         } catch (err) {
           console.error(err);
         }

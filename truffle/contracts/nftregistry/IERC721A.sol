@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.18;
+pragma solidity ^0.8.18;
 
 import "../../node_modules/erc721a/contracts/IERC721A.sol";
+import "./LegalContractNFT.sol";
 
 interface IERC721Ac is IERC721A {
     function safeMint(address to, uint quantity, bytes32[] calldata merkleProof, bytes memory _data) external;
@@ -23,4 +24,6 @@ interface IERC721Ac is IERC721A {
     function beginPartiesAwareness() external;
 
     function partyAwareness(address partyAddr) external;
+
+    function transferOwnership(address newOwner) external;
 }

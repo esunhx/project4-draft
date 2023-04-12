@@ -18,14 +18,13 @@ contract("LawfirmFactory", (accounts) => {
 
   before(async () => {
     instance = await LawfirmFactory.new({ from: owner });
-    const myContract = new web3.eth.Contract(contractAbi, contractAddress);
-    const deployedAddress = myContract.options.address;
+    constLawfrimAddr = 0x78e7b5fF97Ceaa33367D74888b05af4f2C548198
   });
 
   it("should create a new Lawfirm", async () => {
     // const proof = tree.getProof("0x" + merkleRoot, 0);
-    console.log(partnerAddr);
-    await instance.createLawfirm(partnerAddr, "0x" + merkleRoot, name, { from: owner, value: 100 });
+    console.log(owner);
+    await instance.createLawfirm(owner, name, { from: owner, value: 100 });
     
     const lawfirmInstance = await Lawfirm.at(lawfirmAddr);
 

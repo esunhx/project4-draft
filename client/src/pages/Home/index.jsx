@@ -43,8 +43,8 @@ const Home = () => {
         <>
             {error && <ErrorModal title={error.title} message={error.message} onClick={errorHandler} />}
             {success && <SuccessModal message={success} onClick={successHandler} />}
-            <div className="wd-full">
-                <div className="justify-center text-center">
+            <div className="bg-blue wd-full justify-center">
+                <div className="justify-center">
                     <div className="space-x-4">
                         <input
                         className="rounded-md h-8 p-2 my-2 border border-sky-800"

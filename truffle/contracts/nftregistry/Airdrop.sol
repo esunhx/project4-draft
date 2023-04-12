@@ -1,23 +1,36 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.18;
+pragma solidity ^0.8.18;
 
 import "../../node_modules/@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 import "../../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 import "./IERC721A.sol";
+import "./LegalContractNFT.sol";
 
 contract AirdropRegistrar is Ownable {
     address public immutable token;
     bytes32 public immutable merkleRoot;
+
+    address public deployedNFTAddr;
 
     mapping(address => bool) public claimed;
 
     event Registered(bytes32 subNode);
     event OriginalCopyIssued(address indexed claimer, bytes32 subNode);
 
-    constructor(address _token, bytes32 _merkleRoot)
-    payable {
+    constructor(address _token) {
         token = _token;
-        merkleRoot = _merkleRoot;
+        merkleRoot = bytes32(abi.encodePacked("_merkleRoot"));
+    }
+
+    function transferAirdropOwnership(address _newOwner) 
+    external 
+    onlyOwner {
+        transferOwnership(_newOwner);
+    }
+
+    function transferNFTOwnership(address _nftAddr, address _newOwner) 
+    public {
+        IERC721Ac(_nftAddr).transferOwnership(_newOwner);
     }
 
     function registerLawfirmSubdomain(
@@ -96,8 +109,7 @@ contract AirdropRegistrar is Ownable {
     }
 
     function resetClaim(address claimer)
-    public 
-    onlyOwner {
+    external {
         require(claimed[claimer], "Unrecognised address");
         claimed[claimer] = false;
     }

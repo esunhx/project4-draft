@@ -1,30 +1,31 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.18;
+pragma solidity ^0.8.18;
 
 //@author Ascanio Macchi di Cellere
 
 import "../../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 import "../../node_modules/@ensdomains/ens-contracts/contracts/registry/ENSRegistry.sol";
 import "../../node_modules/@openzeppelin/contracts/utils/Counters.sol";
+import "../nftregistry/IAirdrop.sol";
 import "../nftregistry/Airdrop.sol";
+import "../nftregistry/IERC721A.sol";
 import "../nftregistry/LegalContractNFT.sol";
 
 contract Lawfirm is Ownable, ENSRegistry {
     bytes32 public immutable lawfirmNode;
-    bytes32 internal immutable merkleRoot;
+    string public lawfirmName;
 
     ENS internal immutable ens = ENS(0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e);
     ENS lawfirmENS;
     AirdropRegistrar registrar;
-
-    mapping (bytes32 => LegalContractNFT) public legalContracts;
+    LegalContractNFT firstContract;
     
-    constructor(address _foundingPartner, bytes32 _lawfirmNode, bytes32 _merkleRoot) payable {
+    constructor(address _foundingPartner, string memory _lawfirmName) payable {
         legalMembers[_foundingPartner].isActive = true;
         legalMembers[_foundingPartner].isPartner = true;
-        lawfirmNode = _lawfirmNode;
-        lawfirmENS = ENS(address(uint160(uint256(_lawfirmNode))));
-        merkleRoot = _merkleRoot;
+        lawfirmName = _lawfirmName;
+        lawfirmNode = bytes32(abi.encode(string.concat(_lawfirmName, ".eth")));
+        lawfirmENS = ENS(address(uint160(uint256(lawfirmNode))));
     }
 
     struct LegalStaff {
@@ -32,11 +33,12 @@ contract Lawfirm is Ownable, ENSRegistry {
         bool isPartner;
         bool isAssociate;
         bool isParalegal;
-        mapping (bytes32 => address) legalContracts;
+        mapping (address => bytes32) legalContracts;
         mapping (address => uint) clients; 
     }
 
     mapping (address => LegalStaff) public legalMembers;
+    mapping (uint256 => address) public registrars;
 
     event LegalStaffRegistered(address legalMemberAddr);
     event PartnerMintedLegalContract(address partnerAddr, bytes32 contractTonkenId);
@@ -58,6 +60,18 @@ contract Lawfirm is Ownable, ENSRegistry {
             "Unknown address for LegalStaff"
         );
         _;
+    }
+
+    function transferLawfirmOwnership(address _newOwner)
+    external 
+    onlyOwner {
+        transferOwnership(_newOwner);
+    }
+
+    function transferAirdropOwnership(address _registrarAddr, address _newOwner) 
+    internal 
+    onlyOwner {
+        IAirdropRegistrar(_registrarAddr).transferAirdropOwnership(_newOwner);
     }
 
     function lawfirmAddr() external view returns (address) {
@@ -84,45 +98,54 @@ contract Lawfirm is Ownable, ENSRegistry {
         legalMembers[_addr].isActive = false;
     }
 
-    function createLegalContract(bytes32[] calldata _merkleProof, bytes32 _subNode, bytes memory _data) 
-    external 
-    onlyPartner {
-        bytes32 node = keccak256(abi.encodePacked(lawfirmNode, _subNode));
-        require(
-            ens.owner(keccak256(abi.encodePacked(lawfirmNode, _subNode))) == address(0),
-            "Subdomain already taken"
-        );
+    // function createLegalContract(bytes32[] calldata _merkleProof, bytes32 _subNode, bytes memory _data) 
+    // external 
+    // onlyPartner {
+    //     bytes32 node = keccak256(abi.encodePacked(lawfirmNode, _subNode));
+    //     require(
+    //         ens.owner(keccak256(abi.encodePacked(lawfirmNode, _subNode))) == address(0),
+    //         "Subdomain already taken"
+    //     );
         
-        ens.setSubnodeOwner(
-            lawfirmNode, 
-            _subNode,
-            ens.owner(node)
-        );
+    //     ens.setSubnodeOwner(
+    //         lawfirmNode, 
+    //         _subNode,
+    //         ens.owner(node)
+    //     );
 
-        address _tokenId = address(uint160(uint256(
-            keccak256(abi.encodePacked(
-                keccak256(abi.encodePacked(msg.sender)),
-                _subNode
-            ))
-        )));
+    //     address _tokenId = address(uint160(uint256(
+    //         keccak256(abi.encodePacked(
+    //             keccak256(abi.encodePacked(msg.sender)),
+    //             _subNode
+    //         ))
+    //     )));
 
-        string memory _tokenBaseURI = string(abi.encodePacked(_tokenId));
-        LegalContractNFT firstContract = new LegalContractNFT{value: 100}(
-            msg.sender,
-            merkleRoot, 
-            uint256(uint160(_tokenId)), 
-            string(abi.encode(_tokenBaseURI))
-        );
+    //     bytes32 merkleRoot = bytes32(abi.encodePacked("merkleRoot"));
+    //     // LegalContractNFT firstContract = new LegalContractNFT{value: 100}(
+    //     //     msg.sender,
+    //     //     merkleRoot, 
+    //     //     uint256(uint160(_tokenId)), 
+    //     //     string(abi.encodePacked(_tokenId))
+    //     // );
 
-        legalMembers[msg.sender].legalContracts[_subNode] = _tokenId;
-        registrar = new AirdropRegistrar{value: 100}(_tokenId, merkleRoot);
+    //     legalMembers[msg.sender].legalContracts[_tokenId] = _subNode;
+    //     address registrarAddr = address(
+    //         IAirdropRegistrar.createAirdropRegistrar(uint256(uint160(_tokenId)))
+    //     );
+    //     firstContract = IERC721Ac(_tokenId).createNFT(
+    //         msg.sender, 
+    //         uint256(uint160(_tokenId)), 
+    //         string(abi.encodePacked(_tokenId))
+    //     );
 
-        registrar.registerLawfirmSubdomain(
-            _merkleProof,
-            _subNode,
-            _data
-        );
-    }
+    //     registrars[uint256(uint160(_tokenId))] = registrarAddr;
+
+    //     IAirdropRegistrar(registrarAddr).registerLawfirmSubdomain(
+    //         _merkleProof,
+    //         _subNode,
+    //         _data
+    //     );
+    // }
 
     // function proposeLumpContract(bytes32[] _merkleProof, bytes32 _subNode, bytes _data)
     // external

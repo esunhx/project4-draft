@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.18;
+pragma solidity ^0.8.18;
 
 //@author Ascanio Macchi di Cellere
 //@dev NFT contract to generate legal contracts NFTs
@@ -70,10 +70,10 @@ contract LegalContractNFT is Ownable, ERC721A, AccessControl {
     uint256 public immutable tokenId;
     Counters.Counter private _tokenIdCounter;
     
-    constructor(address partnerAddr, bytes32 _merkleRoot, uint256 _tokenId, string memory _baseURI)
-    payable
+    constructor(address _partnerAddr, uint256 _tokenId, string memory _baseURI)
     ERC721A("LegalContractNFT","LCNFT") {
-        merkleRoot = _merkleRoot;
+        parties[_partnerAddr] = true;
+        merkleRoot = bytes32(abi.encodePacked(("_merkleRoot")));
         tokenId = _tokenId;
         baseURI = _baseURI;
     }
@@ -94,6 +94,12 @@ contract LegalContractNFT is Ownable, ERC721A, AccessControl {
         require(_quantity < 2, "Maximum mint quantity exceeded");
         _safeMint(_addr, _quantity, _data);
     }
+
+    // function createNFT(address _partnerAddr, uint256 _tokenId, string memory _tokenBaseURI) 
+    // external 
+    // returns (LegalContractNFT _newNFT) {
+    //     return (new LegalContractNFT(_partnerAddr, _tokenId, _tokenBaseURI));
+    // }
 
     function supportsInterface(bytes4 interfaceId) 
     public 
@@ -258,6 +264,4 @@ contract LegalContractNFT is Ownable, ERC721A, AccessControl {
     }
 
     // function requestOriginalCopy()
-    
-
 }
